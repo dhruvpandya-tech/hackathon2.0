@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+pydantic
+httpx
+playwright
+beautifulsoup4
+openai
+
+[dev]
+pytest
+python-dotenv
