@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { sendReport } from '../lib/api.js';
-import { generatePDFReport } from '../utils/generateReport.js';
 
 const EmailBar = ({ analysis }) => {
   const [email, setEmail] = useState('');
@@ -50,53 +49,42 @@ const EmailBar = ({ analysis }) => {
   const buttonLabel = status === 'sending' ? 'Sending...' : 'Send Report';
 
   return (
-    <div className="w-full border-t border-white/10 bg-black/40 backdrop-blur-md py-6 mt-12">
+    <div className="flex items-center gap-2 rounded-full border border-white/20 bg-black/70 backdrop-blur-md px-4 py-2 shadow-lg">
       <form
         onSubmit={handleSubmit}
-        className="mx-auto flex w-full max-w-4xl flex-col gap-4 px-4 text-white sm:flex-row sm:items-center sm:justify-between"
+        className="pointer-events-auto mx-auto flex flex-col gap-3 rounded-3xl border border-white/10 bg-black/70 px-4 py-4 text-white shadow-2xl backdrop-blur-md sm:flex-row sm:items-center sm:gap-4 sm:px-6"
       >
-        <div className="flex-1">
-          <p className="text-sm font-semibold tracking-wide text-white/80 mb-2">
-            Get full report via email
-          </p>
-          <div className="flex items-center gap-3">
-            <input
-              id="report-email"
-              type="email"
-              placeholder="you@company.com"
-              className="flex-1 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm placeholder-white/40 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
-              value={email}
-              onChange={(event) => {
-                setEmail(event.target.value);
-                setMessage('');
-                setStatus('idle');
-              }}
-              required
-            />
-            <button
-              type="submit"
-              disabled={disabled}
-              className={`rounded-xl px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${disabled
+        <div className="flex-1 w-full">
+          <label htmlFor="report-email" className="text-xs uppercase tracking-[0.3em] text-white/60">
+            Send Report via Email
+          </label>
+          <input
+            id="report-email"
+            type="email"
+            placeholder="you@company.com"
+            className="mt-2 w-full rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/40 outline-none focus:border-accent focus:ring-2 focus:ring-accent/40"
+            value={email}
+            onChange={(event) => {
+              setEmail(event.target.value);
+              setMessage('');
+              setStatus('idle');
+            }}
+            required
+          />
+        </div>
+        <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4">
+          <button
+            type="submit"
+            disabled={disabled}
+            className={`w-full whitespace-nowrap rounded-2xl px-6 py-3 text-sm font-semibold uppercase tracking-wide transition ${disabled
                 ? 'bg-white/10 text-white/60 cursor-not-allowed'
                 : 'bg-gradient-to-r from-accent to-sky-400 text-slate-900 hover:opacity-90'
-                }`}
-            >
-              {buttonLabel}
-            </button>
-            <button
-              type="button"
-              onClick={() => generatePDFReport(analysis)}
-              disabled={!analysis}
-              className={`rounded-xl px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${analysis
-                ? 'border border-white/20 text-white hover:bg-white/10'
-                : 'border border-white/5 text-white/50 cursor-not-allowed'
-                }`}
-            >
-              Download Report
-            </button>
-          </div>
+              }`}
+          >
+            {buttonLabel}
+          </button>
+          <p className="text-xs text-white/70 min-h-[1.25rem]">{message}</p>
         </div>
-        <p className="text-xs text-white/70 min-w-[140px] text-center sm:text-left">{message}</p>
       </form>
     </div>
   );
